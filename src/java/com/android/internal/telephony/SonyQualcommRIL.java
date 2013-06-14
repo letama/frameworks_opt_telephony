@@ -24,6 +24,7 @@ import android.os.Message;
 import android.os.Parcel;
 import android.text.TextUtils;
 import android.util.Log;
+import java.util.ArrayList;
 
 /*
  * Qualcomm RIL class for basebands that do not send the SIM status
@@ -277,4 +278,32 @@ public class SonyQualcommRIL extends QualcommSharedRIL implements CommandsInterf
         Log.d(LOG_TAG, "RIL_REQUEST_CDMA_GET_SUBSCRIPTION_SOURCE blocked!!!");
         //send(rr);
     }
+
+    @Override
+    protected Object
+    responseOperatorInfos(Parcel p) {
+        String strings[] = (String [])responseStrings(p);
+        ArrayList<OperatorInfo> ret;
+
+        if (strings.length % 5 != 0) {
+            throw new RuntimeException(
+                "RIL_REQUEST_QUERY_AVAILABLE_NETWORKS: invalid response. Got "
+                + strings.length + " strings, expected multible of 5");
+        }
+
+        ret = new ArrayList<OperatorInfo>(strings.length / 5);
+
+        for (int i = 0 ; i < strings.length ; i += 5) {
+	    // str[i+4] is rat, ignore it
+            ret.add (
+                new OperatorInfo(
+                    strings[i+0],
+                    strings[i+1],
+                    strings[i+2],
+                    strings[i+3]));
+        }
+
+        return ret;
+    }
+
 }
