@@ -102,6 +102,10 @@ public class SonyQualcommRIL extends QualcommSharedRIL implements CommandsInterf
             case RIL_REQUEST_SEND_SMS_EXPECT_MORE: ret =  responseSMS(p); break;
             case RIL_REQUEST_SETUP_DATA_CALL: ret =  responseSetupDataCall(p); break;
             case RIL_REQUEST_SIM_IO: ret =  responseICC_IO(p); break;
+            case RIL_REQUEST_SIM_TRANSMIT_BASIC: ret =  responseICC_IO(p); break;
+            case RIL_REQUEST_SIM_OPEN_CHANNEL: ret  = responseInts(p); break;
+            case RIL_REQUEST_SIM_CLOSE_CHANNEL: ret  = responseVoid(p); break;
+            case RIL_REQUEST_SIM_TRANSMIT_CHANNEL: ret = responseICC_IO(p); break;
             case RIL_REQUEST_SEND_USSD: ret =  responseVoid(p); break;
             case RIL_REQUEST_CANCEL_USSD: ret =  responseVoid(p); break;
             case RIL_REQUEST_GET_CLIR: ret =  responseInts(p); break;
@@ -182,6 +186,7 @@ public class SonyQualcommRIL extends QualcommSharedRIL implements CommandsInterf
             case RIL_REQUEST_STK_SEND_ENVELOPE_WITH_STATUS: ret = responseICC_IO(p); break;
             case RIL_REQUEST_VOICE_RADIO_TECH: ret = responseInts(p); break;
             case 121: ret = responseVoid(p); break; // RIL_REQUEST_SET_TRANSMIT_POWER
+
 
             default:
                 throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
